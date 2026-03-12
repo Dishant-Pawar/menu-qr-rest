@@ -53,9 +53,13 @@ jobs:
 
       - name: Type check
         run: pnpm check-types
+        env:
+          SKIP_ENV_VALIDATION: true
 
       - name: Lint check
         run: pnpm lint
+        env:
+          SKIP_ENV_VALIDATION: true
 
   deploy-production:
     name: Deploy to Production

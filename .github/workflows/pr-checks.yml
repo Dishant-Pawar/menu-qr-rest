@@ -75,9 +75,13 @@ jobs:
       - name: Run linter
         run: pnpm lint || true
         continue-on-error: true
+        env:
+          SKIP_ENV_VALIDATION: true
 
       - name: Type check
         run: pnpm tsc --noEmit
+        env:
+          SKIP_ENV_VALIDATION: true
 
   # Job 3: Test Coverage Check
   test-coverage:
