@@ -240,5 +240,5 @@ export interface AuditLogEntry {
  */
 export const createAuditLog = (entry: AuditLogEntry): void => {
   // TODO: Implement actual logging to database or logging service
-  console.log('[AUDIT]', JSON.stringify(maskSensitiveData(entry)));
+  console.log('[AUDIT]', JSON.stringify(maskSensitiveData(entry as unknown as Record<string, unknown>)));
 };

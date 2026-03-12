@@ -175,7 +175,7 @@ export const validateRouteConfig = (): boolean => {
 
 // Export for use in browser console during development
 if (typeof window !== 'undefined') {
-  (window as Window & { devUtils: unknown }).devUtils = {
+  (window as unknown as { devUtils: unknown }).devUtils = {
     printDevInfo,
     printPerformanceSummary,
     printRouterInfo,
