@@ -29,14 +29,14 @@ class QueryCache {
     });
   }
 
-  get(key: string): any | null {
+  get(key: string): any | undefined {
     const cached = this.cache.get(key);
     
-    if (!cached) return null;
+    if (!cached) return undefined;
     
     if (Date.now() > cached.expiry) {
       this.cache.delete(key);
-      return null;
+      return undefined;
     }
     
     return cached.data;
@@ -78,7 +78,7 @@ export const cachedQuery = async <T>(
 ): Promise<T> => {
   const cached = queryCache.get(key);
   
-  if (cached !== null) {
+  if (cached !== undefined) {
     return cached as T;
   }
   

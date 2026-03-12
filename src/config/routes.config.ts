@@ -80,7 +80,9 @@ export const getPublicRoutes = () => [
  */
 export const isPublicRoute = (pathname: string): boolean => {
   const publicRoutes = getPublicRoutes();
-  return publicRoutes.some(route => pathname.startsWith(route));
+  // Check for exact match or /menu/[slug] pattern (public menu view)
+  return publicRoutes.some(route => pathname === route) || 
+         (pathname.startsWith('/menu/') && !pathname.includes('/create') && !pathname.includes('/manage'));
 };
 
 /**

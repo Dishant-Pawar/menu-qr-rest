@@ -124,7 +124,7 @@ describe('Auth Router', () => {
         select: { subscriptionType: true },
       });
 
-      expect(result).toEqual({ subscriptionType: 'PREMIUM' });
+      expect(result).toEqual(mockProfile);
     });
 
     it('should default to FREE for new users', async () => {

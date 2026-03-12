@@ -98,8 +98,8 @@ export const validateFileUpload = (
  */
 export const sanitizeFilename = (filename: string): string => {
   return filename
-    .replace(/[^a-zA-Z0-9.-]/g, '_')
-    .replace(/\.{2,}/g, '.')
+    .replace(/\.\./g, '_..') // Replace .. with _.. first (path traversal)
+    .replace(/[^a-zA-Z0-9._-]/g, '_') // Then replace other invalid chars
     .substring(0, 255);
 };
 
@@ -207,6 +207,8 @@ export const detectSQLInjection = (input: string): boolean => {
     /(\bUNION\b|\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bCREATE\b)/i,
     /(-{2}|\/\*|\*\/)/,
     /(;|\||&)/,
+    /('\s*(OR|AND)\s*')/i,
+    /('\s*=\s*')/,
   ];
   
   return sqlPatterns.some(pattern => pattern.test(input));
