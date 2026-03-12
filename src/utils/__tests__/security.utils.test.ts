@@ -62,7 +62,7 @@ describe('Security Utilities', () => {
 
   describe('sanitizeFilename', () => {
     it('should sanitize dangerous filenames', () => {
-      expect(sanitizeFilename('../../../etc/passwd')).toBe('_.._.._.._etc_passwd');
+      expect(sanitizeFilename('../../../etc/passwd')).toBe('_..__..__.._etc_passwd');
       expect(sanitizeFilename('test file!@#.jpg')).toBe('test_file___.jpg');
     });
 

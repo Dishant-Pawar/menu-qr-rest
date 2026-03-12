@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
 import {
   ROUTER_REGISTRY,
@@ -15,6 +16,7 @@ describe('tRPC Router Registry', () => {
       expect(ROUTER_REGISTRY).toHaveProperty('auth');
       expect(ROUTER_REGISTRY).toHaveProperty('languages');
       expect(ROUTER_REGISTRY).toHaveProperty('payments');
+      expect(ROUTER_REGISTRY).toHaveProperty('user');
     });
 
     it('should have router objects defined', () => {
@@ -22,6 +24,7 @@ describe('tRPC Router Registry', () => {
       expect(ROUTER_REGISTRY.auth).toBeDefined();
       expect(ROUTER_REGISTRY.languages).toBeDefined();
       expect(ROUTER_REGISTRY.payments).toBeDefined();
+      expect(ROUTER_REGISTRY.user).toBeDefined();
     });
   });
 
@@ -60,11 +63,12 @@ describe('tRPC Router Registry', () => {
       expect(routers).toContain('auth');
       expect(routers).toContain('languages');
       expect(routers).toContain('payments');
+      expect(routers).toContain('user');
     });
 
     it('should return correct number of routers', () => {
       const routers = getRegisteredRouters();
-      expect(routers.length).toBe(4);
+      expect(routers.length).toBe(5);
     });
   });
 
@@ -74,6 +78,7 @@ describe('tRPC Router Registry', () => {
       expect(isRouterRegistered('auth')).toBe(true);
       expect(isRouterRegistered('languages')).toBe(true);
       expect(isRouterRegistered('payments')).toBe(true);
+      expect(isRouterRegistered('user')).toBe(true);
     });
 
     it('should return false for non-registered routers', () => {
