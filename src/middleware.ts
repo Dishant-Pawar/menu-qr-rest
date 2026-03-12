@@ -54,12 +54,21 @@ export async function middleware(req: NextRequest) {
   // Add performance logging
   if (!shouldSkipLogging(req.nextUrl.pathname)) {
     const duration = Math.round(performance.now() - startTime);
+
     response.headers.set('X-Response-Time', `${duration}ms`);
     
     // Log performance in development
     if (process.env.NODE_ENV === 'development') {
-      const color = duration < 100 ? '\x1b[32m' : duration < 500 ? '\x1b[33m' : '\x1b[31m';
+      let color = '\x1b[31m';
+
+      if (duration < 100) {
+        color = '\x1b[32m';
+      } else if (duration < 500) {
+        color = '\x1b[33m';
+      }
+
       const reset = '\x1b[0m';
+
       console.log(
         `${color}[PERF]${reset} ${req.method} ${req.nextUrl.pathname} - ${duration}ms`
       );

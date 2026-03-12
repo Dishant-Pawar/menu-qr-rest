@@ -22,7 +22,14 @@ const logPerformance = (metrics: PerformanceMetrics): void => {
   const { path, method, duration, timestamp, statusCode } = metrics;
   
   // Color-coded console output based on response time
-  const color = duration < 100 ? '\x1b[32m' : duration < 500 ? '\x1b[33m' : '\x1b[31m';
+  let color = '\x1b[31m';
+
+  if (duration < 100) {
+    color = '\x1b[32m';
+  } else if (duration < 500) {
+    color = '\x1b[33m';
+  }
+
   const reset = '\x1b[0m';
   
   console.log(
@@ -60,6 +67,7 @@ export const getAverageResponseTime = (path: string): number => {
   if (pathMetrics.length === 0) return 0;
   
   const totalDuration = pathMetrics.reduce((sum, m) => sum + m.duration, 0);
+
   return totalDuration / pathMetrics.length;
 };
 

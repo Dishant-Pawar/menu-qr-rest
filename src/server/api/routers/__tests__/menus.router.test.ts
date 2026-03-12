@@ -47,7 +47,7 @@ describe('Menus Router Integration Tests', () => {
         },
       ];
 
-      (mockDb.menus.findMany as any).mockResolvedValue(mockMenus);
+      vi.mocked(mockDb.menus.findMany).mockResolvedValue(mockMenus);
 
       const result = await mockDb.menus.findMany({
         where: { userId: mockUser.id },
@@ -60,7 +60,7 @@ describe('Menus Router Integration Tests', () => {
     });
 
     it('should handle empty menu list', async () => {
-      (mockDb.menus.findMany as any).mockResolvedValue([]);
+      vi.mocked(mockDb.menus.findMany).mockResolvedValue([]);
 
       const result = await mockDb.menus.findMany({
         where: { userId: mockUser.id },
@@ -81,7 +81,7 @@ describe('Menus Router Integration Tests', () => {
         menuLanguages: [],
       };
 
-      (mockDb.menus.findFirst as any).mockResolvedValue(mockMenu);
+      vi.mocked(mockDb.menus.findFirst).mockResolvedValue(mockMenu);
 
       const result = await mockDb.menus.findFirst({
         where: { slug: 'test-restaurant-123' },
@@ -91,7 +91,7 @@ describe('Menus Router Integration Tests', () => {
     });
 
     it('should return null for non-existent slug', async () => {
-      (mockDb.menus.findFirst as any).mockResolvedValue(null);
+      vi.mocked(mockDb.menus.findFirst).mockResolvedValue(null);
 
       const result = await mockDb.menus.findFirst({
         where: { slug: 'non-existent' },
@@ -116,7 +116,7 @@ describe('Menus Router Integration Tests', () => {
         userId: 'user-123',
       };
 
-      (mockDb.menus.create as any).mockResolvedValue(createdMenu);
+      vi.mocked(mockDb.menus.create).mockResolvedValue(createdMenu);
 
       const result = await mockDb.menus.create({
         data: {
@@ -178,7 +178,7 @@ describe('Menus Router Integration Tests', () => {
     it('should complete menu query within acceptable time', async () => {
       const start = performance.now();
       
-      (mockDb.menus.findFirst as any).mockResolvedValue({
+      vi.mocked(mockDb.menus.findFirst).mockResolvedValue({
         id: 'menu-1',
         name: 'Test',
       });

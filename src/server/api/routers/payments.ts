@@ -8,12 +8,14 @@ import { z } from "zod";
 // Lazy client getter - validates only when actually used (not at build time)
 function getLemonSqueezyClient(): LemonsqueezyClient {
   const apiKey = env.LEMON_SQUEEZY_API_KEY;
+
   if (!apiKey) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Payment system not configured. Please contact support.",
     });
   }
+
   return new LemonsqueezyClient(apiKey);
 }
 

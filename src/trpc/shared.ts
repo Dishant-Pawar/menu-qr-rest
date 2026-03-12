@@ -22,6 +22,7 @@ function getBaseUrl() {
 
   // Production fallback
   console.warn("[tRPC] Using fallback URL - configure NEXT_PUBLIC_SITE_URL");
+
   return "https://feastqr.com";
 }
 

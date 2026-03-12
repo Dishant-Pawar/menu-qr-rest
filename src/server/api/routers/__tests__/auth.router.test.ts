@@ -44,7 +44,7 @@ describe('Auth Router', () => {
         subscriptionType: 'FREE',
       };
 
-      (mockDb.profiles.findUnique as any).mockResolvedValue(mockProfile);
+      vi.mocked(mockDb.profiles.findUnique).mockResolvedValue(mockProfile);
 
       const result = await mockDb.profiles.findUnique({
         where: { userId: mockUser.id },
@@ -57,7 +57,7 @@ describe('Auth Router', () => {
     });
 
     it('should return null for non-existent user', async () => {
-      (mockDb.profiles.findUnique as any).mockResolvedValue(null);
+      vi.mocked(mockDb.profiles.findUnique).mockResolvedValue(null);
 
       const result = await mockDb.profiles.findUnique({
         where: { userId: 'non-existent' },
@@ -80,7 +80,7 @@ describe('Auth Router', () => {
         ...updateData,
       };
 
-      (mockDb.profiles.update as any).mockResolvedValue(updatedProfile);
+      vi.mocked(mockDb.profiles.update).mockResolvedValue(updatedProfile);
 
       const result = await mockDb.profiles.update({
         where: { userId: mockUser.id },
@@ -105,6 +105,7 @@ describe('Auth Router', () => {
       
       // After sanitization
       const sanitized = maliciousInput.name.replace(/<[^>]*>/g, '');
+
       expect(sanitized).toBe('alert("xss")');
     });
   });
@@ -117,7 +118,7 @@ describe('Auth Router', () => {
         subscriptionType: 'PREMIUM',
       };
 
-      (mockDb.profiles.findUnique as any).mockResolvedValue(mockProfile);
+      vi.mocked(mockDb.profiles.findUnique).mockResolvedValue(mockProfile);
 
       const result = await mockDb.profiles.findUnique({
         where: { userId: mockUser.id },
@@ -134,7 +135,7 @@ describe('Auth Router', () => {
         subscriptionType: 'FREE',
       };
 
-      (mockDb.profiles.findUnique as any).mockResolvedValue(mockProfile);
+      vi.mocked(mockDb.profiles.findUnique).mockResolvedValue(mockProfile);
 
       const result = await mockDb.profiles.findUnique({
         where: { userId: mockUser.id },
@@ -147,6 +148,7 @@ describe('Auth Router', () => {
   describe('authorization', () => {
     it('should require authentication for protected routes', () => {
       const isAuthenticated = !!mockUser.id;
+
       expect(isAuthenticated).toBe(true);
     });
 
@@ -210,7 +212,7 @@ describe('Auth Router', () => {
 
   describe('error handling', () => {
     it('should handle database errors gracefully', async () => {
-      (mockDb.profiles.findUnique as any).mockRejectedValue(
+      vi.mocked(mockDb.profiles.findUnique).mockRejectedValue(
         new Error('Database connection failed')
       );
 
@@ -222,7 +224,7 @@ describe('Auth Router', () => {
     it('should handle duplicate email error', async () => {
       const duplicateError = new Error('Unique constraint violation');
       
-      (mockDb.profiles.create as any).mockRejectedValue(duplicateError);
+      vi.mocked(mockDb.profiles.create).mockRejectedValue(duplicateError);
 
       await expect(
         mockDb.profiles.create({
@@ -253,6 +255,7 @@ describe('Auth Router', () => {
       };
 
       const isExpired = expiredSession.expiresAt.getTime() < Date.now();
+
       expect(isExpired).toBe(true);
     });
   });

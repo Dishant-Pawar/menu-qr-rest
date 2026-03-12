@@ -58,6 +58,7 @@ describe('Route Configuration', () => {
   describe('getPublicRoutes', () => {
     it('should return array of public routes', () => {
       const publicRoutes = getPublicRoutes();
+
       expect(Array.isArray(publicRoutes)).toBe(true);
       expect(publicRoutes).toContain('/');
       expect(publicRoutes).toContain('/login');

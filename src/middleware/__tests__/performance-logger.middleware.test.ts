@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { type NextRequest } from 'next/server';
 import {
   shouldSkipLogging,
   storeMetrics,
@@ -56,6 +55,7 @@ describe('Performance Logger Middleware', () => {
       }
 
       const allMetrics = getAllMetrics();
+
       expect(allMetrics.length).toBeLessThanOrEqual(100);
     });
   });
@@ -69,11 +69,13 @@ describe('Performance Logger Middleware', () => {
       storeMetrics({ path, method: 'GET', duration: 300, timestamp: new Date().toISOString() });
 
       const average = getAverageResponseTime(path);
+
       expect(average).toBe(200);
     });
 
     it('should return 0 for path with no metrics', () => {
       const average = getAverageResponseTime('/non-existent-path');
+
       expect(average).toBe(0);
     });
 
@@ -102,9 +104,11 @@ describe('Performance Logger Middleware', () => {
   describe('getAllMetrics', () => {
     it('should return copy of metrics array', () => {
       const metrics = { path: '/test', method: 'GET', duration: 100, timestamp: new Date().toISOString() };
+
       storeMetrics(metrics);
 
       const retrieved = getAllMetrics();
+
       retrieved.push({ path: '/fake', method: 'GET', duration: 50, timestamp: new Date().toISOString() });
 
       // Original should not be affected

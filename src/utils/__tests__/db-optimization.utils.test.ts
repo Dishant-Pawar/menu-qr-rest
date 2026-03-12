@@ -53,6 +53,7 @@ describe('Database Optimization Utils', () => {
 
     it('should store and retrieve values', () => {
       const testKey = 'manual-test-key-' + Date.now();
+
       queryCache.set(testKey, { data: 'test' }, 60000); // 1 min TTL
       const result = queryCache.get(testKey);
       

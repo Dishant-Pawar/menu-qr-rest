@@ -20,22 +20,23 @@ const CACHE_TTL = {
  * In production, replace with Redis or similar
  */
 class QueryCache {
-  private cache: Map<string, { data: any; expiry: number }> = new Map();
+  private cache: Map<string, { data: unknown; expiry: number }> = new Map();
 
-  set(key: string, data: any, ttl: number): void {
+  set(key: string, data: unknown, ttl: number): void {
     this.cache.set(key, {
       data,
       expiry: Date.now() + ttl,
     });
   }
 
-  get(key: string): any | undefined {
+  get(key: string): unknown {
     const cached = this.cache.get(key);
     
     if (!cached) return undefined;
     
     if (Date.now() > cached.expiry) {
       this.cache.delete(key);
+
       return undefined;
     }
     
@@ -50,9 +51,18 @@ class QueryCache {
     this.cache.clear();
   }
 
+  deleteByPattern(pattern: string): void {
+    for (const key of this.cache.keys()) {
+      if (key.includes(pattern)) {
+        this.cache.delete(key);
+      }
+    }
+  }
+
   // Clean up expired entries
   cleanup(): void {
     const now = Date.now();
+
     for (const [key, value] of this.cache.entries()) {
       if (now > value.expiry) {
         this.cache.delete(key);
@@ -83,6 +93,7 @@ export const cachedQuery = async <T>(
   }
   
   const result = await queryFn();
+
   queryCache.set(key, result, ttl);
   
   return result;
@@ -92,12 +103,7 @@ export const cachedQuery = async <T>(
  * Invalidate cache by pattern
  */
 export const invalidateCachePattern = (pattern: string): void => {
-  const cache = (queryCache as any).cache;
-  for (const key of cache.keys()) {
-    if (key.includes(pattern)) {
-      cache.delete(key);
-    }
-  }
+  queryCache.deleteByPattern(pattern);
 };
 
 /**
@@ -282,6 +288,7 @@ export const monitorQuery = async <T>(
     return result;
   } catch (error) {
     const duration = performance.now() - start;
+
     console.error(`[DB ERROR] ${name} failed after ${duration.toFixed(2)}ms`, error);
     throw error;
   }
@@ -297,6 +304,7 @@ export const bulkInsertBatched = async <T>(
 ): Promise<void> => {
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize);
+
     await insertFn(batch);
   }
 };
@@ -304,13 +312,18 @@ export const bulkInsertBatched = async <T>(
 /**
  * Optimized count query
  */
+type PrismaTableModel = {
+  count: (args: { where: Record<string, unknown> }) => Promise<number>;
+};
+
 export const getOptimizedCount = async (
   db: PrismaClient,
   tableName: string,
-  where: any
+  where: Record<string, unknown>
 ): Promise<number> => {
   // Use _count for better performance
-  const table = (db as any)[tableName];
+  const table = (db as unknown as Record<string, PrismaTableModel | undefined>)[tableName];
+
   if (!table) throw new Error(`Table ${tableName} not found`);
   
   return table.count({ where });
@@ -335,6 +348,7 @@ export const checkDatabaseHealth = async (db: PrismaClient): Promise<{
     };
   } catch (error) {
     console.error('[DB HEALTH CHECK FAILED]', error);
+
     return {
       healthy: false,
       latency: -1,
@@ -347,7 +361,7 @@ export const checkDatabaseHealth = async (db: PrismaClient): Promise<{
  */
 export const generateCacheKey = (
   prefix: string,
-  params: Record<string, any>
+  params: Record<string, unknown>
 ): string => {
   const sortedParams = Object.keys(params)
     .sort()

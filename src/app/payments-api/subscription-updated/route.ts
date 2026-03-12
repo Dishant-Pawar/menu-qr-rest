@@ -65,8 +65,10 @@ export const POST = async (request: NextRequest) => {
       const digest = Buffer.from(hmac.update(text).digest("hex"), "utf8");
       
       const signatureHeader = request.headers.get("x-signature");
+
       if (!signatureHeader) {
         console.error("[Webhook] Missing x-signature header");
+
         return new Response("Missing x-signature header.", { status: 400 });
       }
       
@@ -74,6 +76,7 @@ export const POST = async (request: NextRequest) => {
       
       if (!crypto.timingSafeEqual(digest, signature)) {
         console.error("[Webhook] Invalid signature");
+
         return new Response("Invalid signature.", { status: 400 });
       }
     }

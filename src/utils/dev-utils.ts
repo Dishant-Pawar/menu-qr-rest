@@ -4,7 +4,7 @@
  * Helper functions for development and debugging
  */
 
-import { getAllMetrics, getAverageResponseTime } from '../middleware/performance-logger.middleware';
+import { getAllMetrics } from '../middleware/performance-logger.middleware';
 import { getRegisteredRouters, getCriticalRouters, ROUTER_METADATA } from '../server/api/router.registry';
 import { APP_ROUTES, getPublicRoutes } from '../config/routes.config';
 
@@ -16,6 +16,7 @@ export const printPerformanceSummary = (): void => {
   
   if (metrics.length === 0) {
     console.log('📊 No performance metrics available yet');
+
     return;
   }
 
@@ -27,7 +28,9 @@ export const printPerformanceSummary = (): void => {
     if (!acc[metric.path]) {
       acc[metric.path] = [];
     }
+
     acc[metric.path]!.push(metric.duration);
+
     return acc;
   }, {} as Record<string, number[]>);
 
@@ -123,6 +126,7 @@ export const checkSlowRoutes = (thresholdMs: number = 500): void => {
   
   if (slowMetrics.length === 0) {
     console.log(`✅ No routes slower than ${thresholdMs}ms`);
+
     return;
   }
   
@@ -160,16 +164,18 @@ export const validateRouteConfig = (): boolean => {
   if (errors.length > 0) {
     console.error('❌ Route configuration errors:');
     errors.forEach(error => console.error(`   - ${error}`));
+
     return false;
   }
   
   console.log('✅ Route configuration is valid');
+
   return true;
 };
 
 // Export for use in browser console during development
 if (typeof window !== 'undefined') {
-  (window as any).devUtils = {
+  (window as Window & { devUtils: unknown }).devUtils = {
     printDevInfo,
     printPerformanceSummary,
     printRouterInfo,

@@ -84,6 +84,7 @@ export function RouteProtectionExample() {
       if (!isAuthenticated) {
         // Redirect to login
         router.push(APP_ROUTES.AUTH.LOGIN);
+
         return;
       }
     }
@@ -160,6 +161,7 @@ export async function fetchMenus() {
 
   // ✅ New way
   const response = await fetch(APP_ROUTES.API.TRPC);
+
   return response.json();
 }
 
@@ -182,6 +184,7 @@ export function generateBreadcrumbs(pathname: string): Breadcrumb[] {
     
     // Extract slug from pathname
     const slug = pathname.split('/')[2];
+
     if (slug && slug !== 'create') {
       breadcrumbs.push({ 
         label: 'View Menu', 
@@ -227,7 +230,7 @@ export function MenuNavigation({ isAuthenticated }: { isAuthenticated: boolean }
 export function CreateMenuForm() {
   const router = useRouter();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: unknown) => {
     const result = await createMenu(data);
     
     if (result.success) {
@@ -266,6 +269,6 @@ describe('Navigation Tests', () => {
 
 import Link from 'next/link';
 
-async function createMenu(data: any) {
+async function createMenu(_data: unknown) {
   return { success: true, menuSlug: 'test-menu' };
 }

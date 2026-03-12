@@ -2,14 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { api } from "~/trpc/react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -31,7 +29,6 @@ const deleteAccountSchema = z.object({
 type DeleteAccountFormValues = z.infer<typeof deleteAccountSchema>;
 
 export function DeleteAccountSection() {
-  const { t } = useTranslation();
   const { toast } = useToast();
   const router = useRouter();
   const [open, setOpen] = useState(false);

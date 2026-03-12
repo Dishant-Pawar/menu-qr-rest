@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createTRPCContext } from '../trpc';
 
 describe('tRPC Context Creation', () => {
@@ -15,6 +15,7 @@ describe('tRPC Context Creation', () => {
 
     it('should include headers in context', async () => {
       const headers = new Headers();
+
       headers.set('x-test-header', 'test-value');
       
       const ctx = await createTRPCContext({ headers });

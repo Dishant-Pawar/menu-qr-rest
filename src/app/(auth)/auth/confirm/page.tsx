@@ -21,6 +21,7 @@ export default function ConfirmPage() {
           console.error("Session error:", error);
           setStatus("error");
           setMessage("Failed to verify your email. Please try again.");
+
           return;
         }
 
@@ -36,6 +37,7 @@ export default function ConfirmPage() {
           // If no session yet, wait a bit and check again
           setTimeout(async () => {
             const { data: { session: retrySession } } = await supabase().auth.getSession();
+
             if (retrySession) {
               setStatus("success");
               setMessage("Email confirmed successfully! Redirecting to dashboard...");

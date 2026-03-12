@@ -18,8 +18,10 @@ export default function Page() {
   useEffect(() => {
     async function checkConnectivity() {
       const result = await Sentry.diagnoseSdkConnectivity();
+
       setIsConnected(result !== 'sentry-unreachable');
     }
+
     checkConnectivity();
   }, []);
 
@@ -52,6 +54,7 @@ export default function Page() {
               op: 'test'
             }, async () => {
               const res = await fetch("/api/sentry-example-api");
+
               if (!res.ok) {
                 setHasSentError(true);
                 throw new SentryExampleFrontendError("This error is raised on the frontend of the example page.");
@@ -64,15 +67,17 @@ export default function Page() {
           </span>
         </button>
 
-        {hasSentError ? (
+        {hasSentError && (
           <p className="success">
             Sample error was sent to Sentry.
           </p>
-        ) : !isConnected ? (
+        )}
+        {!hasSentError && !isConnected && (
           <div className="connectivity-error">
             <p>The Sentry SDK is not able to reach Sentry right now - this may be due to an adblocker. For more information, see <a target="_blank" href="https://docs.sentry.io/platforms/javascript/guides/nextjs/troubleshooting/#the-sdk-is-not-sending-any-data">the troubleshooting guide</a>.</p>
           </div>
-        ) : (
+        )}
+        {!hasSentError && isConnected && (
           <div className="success_placeholder" />
         )}
 

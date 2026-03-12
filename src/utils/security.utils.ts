@@ -45,6 +45,7 @@ export const sanitizeInput = (input: string): string => {
  */
 export const validateSlug = (slug: string): boolean => {
   const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
   return slugRegex.test(slug) && slug.length <= 100;
 };
 
@@ -53,6 +54,7 @@ export const validateSlug = (slug: string): boolean => {
  */
 export const validateUUID = (uuid: string): boolean => {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
   return uuidRegex.test(uuid);
 };
 
@@ -109,10 +111,12 @@ export const sanitizeFilename = (filename: string): string => {
 export const sanitizeURL = (url: string): string => {
   try {
     const parsed = new URL(url);
+
     // Only allow http and https protocols
     if (!['http:', 'https:'].includes(parsed.protocol)) {
       throw new Error('Invalid protocol');
     }
+
     return parsed.toString();
   } catch {
     throw new TRPCError({
@@ -146,7 +150,7 @@ export const escapeSQL = (value: string): string => {
 /**
  * Mask sensitive data for logging
  */
-export const maskSensitiveData = (data: Record<string, any>): Record<string, any> => {
+export const maskSensitiveData = (data: Record<string, unknown>): Record<string, unknown> => {
   const sensitiveKeys = ['password', 'token', 'secret', 'key', 'apiKey', 'accessToken'];
   const masked = { ...data };
 
@@ -170,9 +174,11 @@ export const generateSecureToken = (length: number = 32): string => {
   // Fallback for environments without crypto
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
+
   for (let i = 0; i < length; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
+
   return result;
 };
 

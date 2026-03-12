@@ -117,6 +117,7 @@ export function UserAuthForm() {
           variant: "destructive",
           duration: 9000,
         });
+
         return;
       }
 
@@ -127,6 +128,7 @@ export function UserAuthForm() {
         variant: "destructive",
         duration: 9000,
       });
+
       return;
     }
 

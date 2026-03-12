@@ -68,6 +68,7 @@ describe('tRPC Router Registry', () => {
 
     it('should return correct number of routers', () => {
       const routers = getRegisteredRouters();
+
       expect(routers.length).toBe(5);
     });
   });
@@ -100,6 +101,7 @@ describe('tRPC Router Registry', () => {
 
     it('should return array of strings', () => {
       const critical = getCriticalRouters();
+
       expect(Array.isArray(critical)).toBe(true);
       critical.forEach(router => {
         expect(typeof router).toBe('string');

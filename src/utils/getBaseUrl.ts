@@ -26,5 +26,6 @@ export const getBaseUrl = () => {
 
   // Final fallback - should not reach here in production
   console.warn("[getBaseUrl] Using fallback URL - configure NEXT_PUBLIC_SITE_URL");
+
   return "https://feastqr.com";
 };
